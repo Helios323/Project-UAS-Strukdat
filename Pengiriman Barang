@@ -48,11 +48,9 @@ int main() {
 
     do {
         cout << "========== MENU UTAMA ==========" << endl;
-        cout << "1. Register User" << endl;
-        cout << "2. Register Admin" << endl;
-        cout << "3. Login User" << endl;
-        cout << "4. Login Admin" << endl;
-        cout << "5. Exit" << endl;
+        cout << "1. Login as User" << endl;
+        cout << "2. Login as Admin" << endl;
+        cout << "3. Exit" << endl;
 
         cout << "Masukkan pilihan Anda: ";
         cin >> choice;
