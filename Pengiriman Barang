@@ -1,0 +1,304 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+
+using namespace std;
+
+// Struktur untuk data pengguna
+struct User {
+    string username;
+    string password;
+};
+
+// Struktur untuk data barang
+struct Barang {
+    string pengirim;
+    string alamatPengirim;
+    string penerima;
+    string alamatPenerima;
+    string detailBarang;
+};
+
+// Fungsi untuk registrasi user
+void registerUser(User users[], int& userCount);
+
+// Fungsi untuk registrasi admin
+void registerAdmin(User admins[], int& adminCount);
+
+// Fungsi untuk login user
+bool loginUser(const User users[], int userCount);
+
+// Fungsi untuk login admin
+bool loginAdmin(const User admins[], int adminCount);
+
+// Fungsi untuk menampilkan menu user setelah login
+void tampilMenuUser(User user);
+
+int main() {
+    const int maxUsers = 100;
+    const int maxAdmins = 10;
+
+    User users[maxUsers];
+    User admins[maxAdmins];
+
+    int userCount = 0;
+    int adminCount = 0;
+
+    int choice;
+
+    do {
+        cout << "========== MENU UTAMA ==========" << endl;
+        cout << "1. Register User" << endl;
+        cout << "2. Register Admin" << endl;
+        cout << "3. Login User" << endl;
+        cout << "4. Login Admin" << endl;
+        cout << "5. Exit" << endl;
+
+        cout << "Masukkan pilihan Anda: ";
+        cin >> choice;
+        cout << "\n" << endl;
+
+        switch (choice) {
+            case 1:
+                registerUser(users, userCount);
+                break;
+            case 2:
+                registerAdmin(admins, adminCount);
+                break;
+            case 3:
+                if (loginUser(users, userCount)) {
+                    cout << "Login User berhasil!" << endl;
+                    cout << "\n" << endl;
+                    // Memanggil fungsi untuk menampilkan menu user
+                    tampilMenuUser(users[userCount - 1]);
+                } else {
+                    cout << "Login User gagal. Username atau password salah." << endl;
+                    cout << "\n" << endl;
+                }
+                break;
+            case 4:
+                if (loginAdmin(admins, adminCount)) {
+                    cout << "Login Admin berhasil!" << endl;
+                    cout << "\n" << endl;
+                    // Implementasikan menu untuk admin di sini
+                } else {
+                    cout << "Login Admin gagal. Username atau password salah." << endl;
+                    cout << "\n" << endl;
+                }
+                break;
+            case 5:
+                cout << "Keluar dari program. Terima kasih!" << endl;
+                cout << "\n" << endl;
+                break;
+            default:
+                cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
+                cout << "\n" << endl;
+        }
+    } while (choice != 5);
+
+    return 0;
+}
+
+void registerUser(User users[], int& userCount) {
+    if (userCount < 100) {
+        cout << "========== REGISTER USER ==========" << endl;
+        cout << "Masukkan username: ";
+        cin >> users[userCount].username;
+
+        cout << "Masukkan password: ";
+        cin >> users[userCount].password;
+
+        userCount++;
+
+        cout << "Registrasi User berhasil!" << endl;
+        cout << "\n" << endl;
+    } else {
+        cout << "Jumlah User telah mencapai batas maksimal." << endl;
+        cout << "\n" << endl;
+    }
+}
+
+void registerAdmin(User admins[], int& adminCount) {
+    if (adminCount < 10) {
+        cout << "========== REGISTER ADMIN ==========" << endl;
+        cout << "Masukkan username: ";
+        cin >> admins[adminCount].username;
+
+        cout << "Masukkan password: ";
+        cin >> admins[adminCount].password;
+
+        adminCount++;
+
+        cout << "Registrasi Admin berhasil!" << endl;
+        cout << "\n" << endl;
+    } else {
+        cout << "Jumlah Admin telah mencapai batas maksimal." << endl;
+        cout << "\n" << endl;
+    }
+}
+
+bool loginUser(const User users[], int userCount) {
+    string username, password;
+
+    cout << "========== LOGIN USER ==========" << endl;
+    cout << "Masukkan username: ";
+    cin >> username;
+
+    cout << "Masukkan password: ";
+    cin >> password;
+
+    for (int i = 0; i < userCount; ++i) {
+        if (users[i].username == username && users[i].password == password) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool loginAdmin(const User admins[], int adminCount) {
+    string username, password;
+
+    cout << "========== LOGIN ADMIN ==========" << endl;
+    cout << "Masukkan username: ";
+    cin >> username;
+
+    cout << "Masukkan password: ";
+    cin >> password;
+
+    for (int i = 0; adminCount; ++i) {
+        if (admins[i].username == username && admins[i].password == password) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void tampilMenuUser(User user) {
+    int choice;
+    do {
+        cout << "========== MENU USER ==========" << endl;
+        cout << "1. Kirim Barang" << endl;
+        cout << "2. Update Pengiriman" << endl;
+        cout << "3. Kembali ke Menu Utama" << endl;
+
+        cout << "Masukkan pilihan Anda: ";
+        cin >> choice;
+        cout << "\n" << endl;
+
+        switch (choice) {
+            case 1:
+                // Implementasikan fungsi kirim barang di sini
+                char jenisLayanan;
+                cout << "Pilih jenis layanan (D untuk Drop Off, P untuk Pick Up): ";
+                cin >> jenisLayanan;
+
+                if (jenisLayanan == 'D' || jenisLayanan == 'd') {
+                    cout << "Anda memilih layanan Drop Off untuk mengirim barang." << endl;
+                    cout << "\n" << endl;
+
+                    // Membuat objek Barang
+                    Barang barang;
+
+                    // Mengisi data diri pengirim
+                    cout << "Masukkan data diri pengirim:" << endl;
+                    cout << "Nama Pengirim: ";
+                    cin.ignore(); // Membersihkan newline character dari buffer
+                    getline(cin, barang.pengirim);
+
+                    cout << "Alamat Pengirim: ";
+                    getline(cin, barang.alamatPengirim);
+
+                    // Mengisi data penerima barang
+                    cout << "Masukkan data penerima barang:" << endl;
+                    cout << "Nama Penerima: ";
+                    getline(cin, barang.penerima);
+
+                    cout << "Alamat Penerima: ";
+                    getline(cin, barang.alamatPenerima);
+
+                    // Mengisi detail barang
+                    cout << "Masukkan detail barang:" << endl;
+                    getline(cin, barang.detailBarang);
+
+                    // Menyimpan data barang ke dalam file
+                    ofstream fileBarang("data_barang.txt", ios::app);
+                    if (fileBarang.is_open()) {
+                        fileBarang << "Pengirim: " << barang.pengirim << endl;
+                        fileBarang << "Alamat Pengirim: " << barang.alamatPengirim << endl;
+                        fileBarang << "Penerima: " << barang.penerima << endl;
+                        fileBarang << "Alamat Penerima: " << barang.alamatPenerima << endl;
+                        fileBarang << "Detail Barang: " << barang.detailBarang << endl;
+                        fileBarang << "==============================" << endl;
+                        fileBarang.close();
+                        cout << "Data barang berhasil disimpan." << endl;
+                        cout << "\n" << endl;
+                    } else {
+                        cout << "Gagal membuka file untuk menyimpan data barang." << endl;
+                        cout << "\n" << endl;
+                    }
+                } else if (jenisLayanan == 'P' || jenisLayanan == 'p') {
+                    cout << "Anda memilih layanan Pick Up untuk mengirim barang." << endl;
+                    cout << "\n" << endl;
+                    // Membuat objek Barang
+                    Barang barang;
+
+                    // Mengisi data diri pengirim
+                    cout << "Masukkan data diri pengirim:" << endl;
+                    cout << "Nama Pengirim: ";
+                    cin.ignore(); // Membersihkan newline character dari buffer
+                    getline(cin, barang.pengirim);
+
+                    cout << "Alamat Pengirim: ";
+                    getline(cin, barang.alamatPengirim);
+
+                    // Mengisi data penerima barang
+                    cout << "Masukkan data penerima barang:" << endl;
+                    cout << "Nama Penerima: ";
+                    getline(cin, barang.penerima);
+
+                    cout << "Alamat Penerima: ";
+                    getline(cin, barang.alamatPenerima);
+
+                    // Mengisi detail barang
+                    cout << "Masukkan detail barang:" << endl;
+                    getline(cin, barang.detailBarang);
+
+                    // Menyimpan data barang ke dalam file
+                    ofstream fileBarang("data_barang.txt", ios::app);
+                    if (fileBarang.is_open()) {
+                        fileBarang << "Pengirim: " << barang.pengirim << endl;
+                        fileBarang << "Alamat Pengirim: " << barang.alamatPengirim << endl;
+                        fileBarang << "Penerima: " << barang.penerima << endl;
+                        fileBarang << "Alamat Penerima: " << barang.alamatPenerima << endl;
+                        fileBarang << "Detail Barang: " << barang.detailBarang << endl;
+                        fileBarang << "==============================" << endl;
+                        fileBarang.close();
+                        cout << "Data barang berhasil disimpan." << endl;
+                        cout << "\n" << endl;
+                    } else {
+                        cout << "Gagal membuka file untuk menyimpan data barang." << endl;
+                        cout << "\n" << endl;
+                    }
+                    // Implementasikan logika untuk layanan Pick Up
+                } else {
+                    cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
+                    cout << "\n" << endl;
+                }
+                break;
+            case 2:
+                // Implementasikan fungsi update pengiriman di sini
+                cout << "Update Pengiriman" << endl;
+                cout << "\n" << endl;
+                break;
+            case 3:
+                cout << "Kembali ke Menu Utama." << endl;
+                cout << "\n" << endl;
+                break;
+            default:
+                cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
+                cout << "\n" << endl;
+        }
+    } while (choice != 3);
+}
